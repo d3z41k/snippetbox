@@ -11,7 +11,7 @@ func (app *application) routes() http.Handler {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", app.home).Methods("GET")
-	r.HandleFunc("/snippet/create", app.createSnippet).Methods("GET")
+	r.HandleFunc("/snippet/create", app.createSnippetForm).Methods("GET")
 	r.HandleFunc("/snippet/create", app.createSnippet).Methods("POST")
 	r.HandleFunc("/snippet/{id}", app.showSnippet).Methods("GET")
 
