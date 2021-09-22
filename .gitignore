@@ -16,3 +16,4 @@ snippetbox
 
 # Log files
 logrus.log
+tls/
