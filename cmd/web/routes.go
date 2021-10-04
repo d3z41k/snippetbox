@@ -16,6 +16,12 @@ func (app *application) routes() http.Handler {
 	r.Handle("/snippet/create", dynamicMiddleware.ThenFunc(app.createSnippet)).Methods("POST")
 	r.Handle("/snippet/{id}", dynamicMiddleware.ThenFunc(app.showSnippet)).Methods("GET")
 
+	r.Handle("/user/signup", dynamicMiddleware.ThenFunc(app.signupUserForm)).Methods("GET")
+	r.Handle("/user/signup", dynamicMiddleware.ThenFunc(app.signupUser)).Methods("POST")
+	r.Handle("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm)).Methods("GET")
+	r.Handle("/user/login", dynamicMiddleware.ThenFunc(app.loginUser)).Methods("POST")
+	r.Handle("/user/logout", dynamicMiddleware.ThenFunc(app.logoutUser)).Methods("POST")
+
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fileServer))
 
