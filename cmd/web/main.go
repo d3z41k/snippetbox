@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"flag"
+	"github.com/d3z41k/snippetbox/pkg/models"
 	"github.com/d3z41k/snippetbox/pkg/models/mysql"
 	"github.com/golangcollege/sessions"
 	"html/template"
@@ -23,9 +24,17 @@ type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	session       *sessions.Session
-	snippets      *mysql.SnippetModel
 	templateCache map[string]*template.Template
-	users         *mysql.UserModel
+	snippets      interface {
+		Insert(string, string, string) (int, error)
+		Get(int) (*models.Snippet, error)
+		Latest() ([]*models.Snippet, error)
+	}
+	users interface {
+		Insert(string, string, string) error
+		Authenticate(string, string) (int, error)
+		Get(int) (*models.User, error)
+	}
 }
 
 func main() {

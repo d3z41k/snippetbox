@@ -1,18 +1,34 @@
 package main
 
 import (
+	"github.com/d3z41k/snippetbox/pkg/models/mock"
+	"github.com/golangcollege/sessions"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/http/httptest"
 	"testing"
+	"time"
 )
 
 func newTestApplication(t *testing.T) *application {
+	templateCache, err := newTemplateCache("./../../ui/html/")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	session := sessions.New([]byte("3dSm5MnygFHh7XidAtbskXrjbwfoJcbJ"))
+	session.Lifetime = 12 * time.Hour
+	session.Secure = true
+
 	return &application{
-		errorLog: log.New(ioutil.Discard, "", 0),
-		infoLog:  log.New(ioutil.Discard, "", 0),
+		errorLog:      log.New(ioutil.Discard, "", 0),
+		infoLog:       log.New(ioutil.Discard, "", 0),
+		session:       session,
+		templateCache: templateCache,
+		snippets:      &mock.SnippetModel{},
+		users:         &mock.UserModel{},
 	}
 }
 
