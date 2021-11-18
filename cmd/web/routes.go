@@ -13,7 +13,6 @@ func (app *application) routes() http.Handler {
 	r := mux.NewRouter()
 	r.Handle("/", dynamicMiddleware.ThenFunc(app.home)).Methods("GET")
 	r.Handle("/about", dynamicMiddleware.ThenFunc(app.about)).Methods("GET")
-	r.Handle("/profile", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.userProfile)).Methods("GET")
 
 	r.Handle("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippetForm)).Methods("GET")
 	r.Handle("/snippet/create", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.createSnippet)).Methods("POST")
@@ -24,6 +23,10 @@ func (app *application) routes() http.Handler {
 	r.Handle("/user/login", dynamicMiddleware.ThenFunc(app.loginUserForm)).Methods("GET")
 	r.Handle("/user/login", dynamicMiddleware.ThenFunc(app.loginUser)).Methods("POST")
 	r.Handle("/user/logout", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.logoutUser)).Methods("POST")
+
+	r.Handle("/user/profile", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.userProfile)).Methods("GET")
+	r.Handle("/user/change-password", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.changePasswordForm)).Methods("GET")
+	r.Handle("/user/change-password", dynamicMiddleware.Append(app.requireAuthentication).ThenFunc(app.changePassword)).Methods("POST")
 
 	r.Handle("/ping", http.HandlerFunc(ping)).Methods("GET")
 
