@@ -21,6 +21,7 @@ type contextKey string
 const contextKeyIsAuthenticated = contextKey("isAuthenticated")
 
 type application struct {
+	debug         bool
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	session       *sessions.Session
@@ -42,6 +43,7 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn", "web:password@/snippetbox?parseTime=true", "MySQL data source name")
 	secret := flag.String("secret", "weFdh+pPbnfabS*+9Ek8RGWrTzb3a!ge", "Secret key")
+	debug := flag.Bool("debug", false, "Enable debug mode")
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -63,6 +65,7 @@ func main() {
 	session.Lifetime = 12 * time.Hour
 
 	app := &application{
+		debug:         *debug,
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		session:       session,
